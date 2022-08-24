@@ -12,7 +12,9 @@ class Articles extends Component
     public function render()
     {
         return view('livewire.articles', [
-            'articles' => Article::where('title', 'like',"%{$this->searh}%")->latest()->get(),
-        ]);
+            'articles' => Article::where(
+                'title', 'like',"%{$this->searh}%"
+            )->latest()->get()
+        ])->layout('layouts.guest');
     }
 }

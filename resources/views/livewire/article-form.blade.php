@@ -9,6 +9,13 @@
         </label>
 
         <label>
+            <input wire:model="article.slug" type="text" placeholder="Url amigable">
+            @error('article.slug')
+            {{ $message }}
+            @enderror
+        </label>
+
+        <label>
             <textarea wire:model="article.content" placeholder="Contenio" cols="20" rows="10"></textarea>
             @error('article.content')
             {{ $message }}
