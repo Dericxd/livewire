@@ -6,6 +6,8 @@ use App\Models\Article;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -43,17 +45,21 @@ class ArticlesFormTest extends TestCase
         Livewire::test('article-form')
             ->assertSeeHtml('wire:submit.prevent="save"')
             ->assertSeeHtml('wire:model="article.title"')
-            ->assertSeeHtml('wire:model="article.slug"')
-            ->assertSeeHtml('wire:model="article.content"')
+            ->assertSeeHtml('wire:model="article.slug"');
         ;
     }
 
     /** @tets **/
     function can_create_new_articles()
     {
+        Storage::fake('public');
+
+        $img = UploadedFile::fake()->image('post-img.png');
+
         $user = User::factory()->create();
 
         Livewire::actingAs($user)->test('article-form')
+            ->set('image', $img)
             ->set('article.title', 'New Article')
             ->set('article.slug', 'new-article')
             ->set('article.content', 'New content from test file')
@@ -61,12 +67,17 @@ class ArticlesFormTest extends TestCase
             ->assertStatus('status')
             ->assertRedirect(route('articles.index'));
 
+//        dd(Storage::disk('public')->files()[0]);
+
         $this->assertDatabaseHas('articles',[
+            'image' => $imgPath = Storage::disk('public')->files()[0],
             'title' => 'New Article',
             'slug' => 'new-article',
             'content' => 'New content from test file',
             'user_id' => $user->id
         ]);
+
+        Storage::disk('public')->assertExists($imgPath);
     }
 
     /** @tets **/
@@ -96,6 +107,34 @@ class ArticlesFormTest extends TestCase
     }
 
     /** @tets **/
+    function can_update_articles_image()
+    {
+        Storage::fake('public');
+
+        $oldImg = UploadedFile::fake()->image('oldImg.png');
+        $oldImgPath = $oldImg->store('/','public');
+        $newImg = UploadedFile::fake()->image('newImg.png');
+//        $newImgPath = $newImg->store('/','public');
+
+        $article = Article::factory()->create([
+            'image' => $oldImgPath
+        ]);
+
+        $user = User::factory()->create();
+
+        Livewire::actingAs($user)->test('article-form',['article' => $article])
+            ->set('image', $newImg)
+            ->call('save')
+            ->assertSessionHas('status')
+            ->assertRedirect(route('articles.index'));
+
+        Storage::disk('public')
+            ->assertExists($article->fresh()->image)
+            ->assertMissing($oldImgPath);
+
+    }
+
+    /** @tets **/
     function title_is_required()
     {
         Livewire::test('article-form')
@@ -103,6 +142,47 @@ class ArticlesFormTest extends TestCase
             ->call('save')
             ->assertHasErrors(['articles.title' => 'required'])
             ->assertSeeHtml(__('validation.required', ['attribute' => 'title']))
+        ;
+    }
+
+    /** @tets **/
+    function image_is_required()
+    {
+        Livewire::test('article-form')
+            ->set('article.title', 'Article title')
+            ->set('article.content', 'Article content')
+            ->call('save')
+            ->assertHasErrors(['image' => 'required'])
+            ->assertSeeHtml(__('validation.required', ['attribute' => 'image']))
+        ;
+    }
+
+    /** @tets **/
+    function image_field_must_be_of_type_image()
+    {
+        Livewire::test('article-form')
+            ->set('image', 'string-not-allowed')
+            ->call('save')
+            ->assertHasErrors(['image' => 'image'])
+            ->assertSeeHtml(__('validation.image', ['attribute' => 'image']))
+        ;
+    }
+
+    /** @tets **/
+    function image_must_be_2mb_max()
+    {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()->image('post-image.png')->size(3000);
+
+        Livewire::test('article-form')
+            ->set('image', $image)
+            ->call('save')
+            ->assertHasErrors(['image' => 'max'])
+            ->assertSeeHtml(__('validation.max.file', [
+                'attribute' => 'image',
+                'max' => '2048'
+            ]))
         ;
     }
 

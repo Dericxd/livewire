@@ -18,6 +18,7 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
+            'image' => $this->faker->imageUrl,
             'title' => $this->faker->sentence,
             'slug' => $this->faker->slug,
             'content' => $this->faker->paragraph,
