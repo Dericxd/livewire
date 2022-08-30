@@ -19,6 +19,8 @@ class ArticleForm extends Component
 
     public $image;
 
+    public $showCategoryModal = false;
+
     protected function rules()
     {
         return [
@@ -36,7 +38,10 @@ class ArticleForm extends Component
 //                'unique:articles,slug,'.$this->article->id
             ],
             'article.content' => ['required'],
-            'article.category_id' => [],
+            'article.category_id' => [
+                'required',
+                Rule::exists('categories', 'id')
+            ],
         ];
     }
 
