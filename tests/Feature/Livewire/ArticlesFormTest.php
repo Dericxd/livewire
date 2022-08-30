@@ -3,6 +3,7 @@
 namespace Tests\Feature\Livewire;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -58,11 +59,14 @@ class ArticlesFormTest extends TestCase
 
         $user = User::factory()->create();
 
+        $category = Category::factory()->create();
+
         Livewire::actingAs($user)->test('article-form')
             ->set('image', $img)
             ->set('article.title', 'New Article')
             ->set('article.slug', 'new-article')
             ->set('article.content', 'New content from test file')
+            ->set('article.category_id', $category)
             ->call('save')
             ->assertStatus('status')
             ->assertRedirect(route('articles.index'));
@@ -74,6 +78,7 @@ class ArticlesFormTest extends TestCase
             'title' => 'New Article',
             'slug' => 'new-article',
             'content' => 'New content from test file',
+            'category_id' => $category->id,
             'user_id' => $user->id
         ]);
 
