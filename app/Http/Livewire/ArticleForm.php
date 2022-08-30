@@ -36,7 +36,10 @@ class ArticleForm extends Component
 //                'unique:articles,slug,'.$this->article->id
             ],
             'article.content' => ['required'],
-            'article.category_id' => [],
+            'article.category_id' => [
+                'required',
+                Rule::exists('categories', 'id')
+            ],
         ];
     }
 

@@ -31,18 +31,18 @@
                         <x-jet-input-error for="article.title" class="mt-2"/>
                     </div>
 
-                    {{--    Categoria    --}}
-                    <div class="col-span-6 sm:col-span-4">
-                        <x-jet-label for="category_id" :value="__('Category')" />
-                        <x-select wire:model="article.category_id" id="category_id" class="mt-1 block w-full" :options="$categories" :placeholder="__('Select category')" />
-                        <x-jet-input-error for="article.category_id" class="mt-2"/>
-                    </div>
-
                     {{--    Slug    --}}
                     <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="slug" :value="__('Slug')" />
                         <x-jet-input wire:model="article.slug" id="slug" class="mt-1 block w-full" type="text" />
                         <x-jet-input-error for="article.slug" class="mt-2"/>
+                    </div>
+
+                    {{--    Categoria    --}}
+                    <div class="col-span-6 sm:col-span-4">
+                        <x-jet-label for="category_id" :value="__('Category')" />
+                        <x-select wire:model="article.category_id" id="category_id" class="mt-1 block w-full" :options="$categories" :placeholder="__('Select category')" />
+                        <x-jet-input-error for="article.category_id" class="mt-2"/>
                     </div>
 
                     {{--    Contenido    --}}
