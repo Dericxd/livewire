@@ -18,23 +18,34 @@
 
                 <x-slot name="form">
 
+                    {{--    Imagen    --}}
                     <div class="col-span-6 sm:col-span-4 relative">
                         <x-select-image wire:model="image" :image="$image" :existing="$article->image" />
                         <x-jet-input-error for="image" class="mt-2"/>
                     </div>
 
+                    {{--    Titulo    --}}
                     <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="title" :value="__('Title')" />
                         <x-jet-input wire:model="article.title" id="title" class="mt-1 block w-full" type="text" />
                         <x-jet-input-error for="article.title" class="mt-2"/>
                     </div>
 
+                    {{--    Categoria    --}}
+                    <div class="col-span-6 sm:col-span-4">
+                        <x-jet-label for="category_id" :value="__('Category')" />
+                        <x-select wire:model="article.category_id" id="category_id" class="mt-1 block w-full" :options="$categories" :placeholder="__('Select category')" />
+                        <x-jet-input-error for="article.category_id" class="mt-2"/>
+                    </div>
+
+                    {{--    Slug    --}}
                     <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="slug" :value="__('Slug')" />
                         <x-jet-input wire:model="article.slug" id="slug" class="mt-1 block w-full" type="text" />
                         <x-jet-input-error for="article.slug" class="mt-2"/>
                     </div>
 
+                    {{--    Contenido    --}}
                     <div class="col-span-6 sm:col-span-4">
                         <x-jet-label for="content" :value="__('Content')" />
                         <x-html-editor wire:model="article.content" id="content" class="mt-1 block w-full"></x-html-editor>
@@ -42,6 +53,7 @@
                         <x-jet-input-error for="article.content" class="mt-2"/>
                     </div>
 
+                    {{--    Boton    --}}
                     <x-slot name="actions">
                         <x-jet-button>
                             {{ __('Save') }}
