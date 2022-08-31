@@ -122,9 +122,11 @@ class ArticleForm extends Component
 
     public function delete()
     {
+        Storage::disk('public')->delete($this->article->image);
+
         $this->article->delete();
-        
-        $this->redirect('/');
+
+        $this->redirect(route('articles.index'));
     }
 
     /**
