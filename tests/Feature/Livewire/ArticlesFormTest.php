@@ -70,9 +70,9 @@ class ArticlesFormTest extends TestCase
             ->set('article.title', 'New Article')
             ->set('article.slug', 'new-article')
             ->set('article.content', 'New content from test file')
-            ->set('article.category_id', $category)
+            ->set('article.category_id', $category->id)
             ->call('save')
-            ->assertStatus('status')
+            ->assertStatus('flash.banner')
             ->assertRedirect(route('articles.index'));
 
 //        dd(Storage::disk('public')->files()[0]);
