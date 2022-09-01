@@ -92,7 +92,9 @@ class ArticlesFormTest extends TestCase
     /** @tets **/
     function can_update_articles()
     {
-        $article = Article::factory()->create();
+        $article = Article::factory()->create([
+            'image' => '/path/to/image'
+        ]);
 
         $user = User::factory()->create();
 
@@ -114,33 +116,6 @@ class ArticlesFormTest extends TestCase
             'slug' => 'update-slug',
             'user_id' => $user->id,
         ]);
-    }
-
-    /** @tets **/
-    function can_delete_articles()
-    {
-        Storage::fake();
-
-        $imagePath = UploadedFile::fake()
-            ->image('image.png')
-            ->store('/', 'public')
-        ;
-
-        $article = Article::factory()->create([
-            'image' => $imagePath
-        ]);
-
-        $user = User::factory()->create();
-
-        Livewire::actingAs($user)->test('article-form',['article' => $article])
-            ->call('delete')
-            ->assertSessionHas('status')
-            ->assertRedirect(route('articles.index'))
-        ;
-
-        Storage::disk('public')->assertMissing($imagePath);
-
-        $this->assertDatabaseCount('articles', 0);
     }
 
     /** @tets **/
