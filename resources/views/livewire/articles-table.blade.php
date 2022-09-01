@@ -43,7 +43,7 @@
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                     <th scope="row" class="flex items-center py-4 px-6 text-gray-900 whitespace-nowrap dark:text-white">
-                        <img class="w-10 h-10 rounded-full" src="{{ $article->image }}"
+                        <img class="w-10 h-10 rounded-full" src="{{ $article->imageUrl() }}"
                              alt="{{ $article->$article }}">
                         <div class="pl-3">
                             <div class="text-base font-semibold">
