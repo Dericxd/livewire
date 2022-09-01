@@ -21,17 +21,31 @@
             </a>
         </div>
 
-
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
-
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="py-3 px-6">
-                        Title
+                        <button class="flex items-center uppercase hover:underline" wire:click="sortBy('title')">
+                            Title
+                            @if($sortFiled === 'title')
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1.5 duration-200 @if($sortDirection === 'desc') rotate-180 @endif">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            @endif
+                        </button>
                     </th>
                     <th scope="col" class="py-3 px-6">
-                        Created at
+                        <button class="flex items-center uppercase hover:underline" wire:click="sortBy('created_at')">
+                            Created at
+                            @if($sortFiled === 'created_at')
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1.5 duration-200 @if($sortDirection === 'desc') rotate-180 @endif">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            @endif
+                        </button>
                     </th>
                     <th scope="col" class="py-3 px-6">
                         Action

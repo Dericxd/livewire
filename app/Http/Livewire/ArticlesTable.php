@@ -12,12 +12,26 @@ class ArticlesTable extends Component
 
     public $searh = '';
 
+    public $sortFiled = 'created_at';
+
+    public $sortDirection = 'desc';
+
+    public function sortBy($field)
+    {
+        $this->sortFiled === $field
+            ? $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc'
+            : $this->sortDirection = 'asc';
+
+        $this->sortFiled = $field;
+    }
+
     public function render()
     {
         return view('livewire.articles-table', [
-            'articles' => Article::where(
-                'title', 'like',"%{$this->searh}%"
-            )->latest()->paginate(5)
+            'articles' => Article::query()
+                ->where('title', 'like',"%{$this->searh}%")
+                ->orderBy($this->sortFiled,$this->sortDirection)
+                ->paginate(5)
         ]);
     }
 }
