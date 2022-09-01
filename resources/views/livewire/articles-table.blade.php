@@ -67,20 +67,9 @@
                 @endforeach
                 </tbody>
             </table>
+            <div class="px-4 py-3 bg-gray-50 border-t">
+                {{ $articles->links() }}
+            </div>
         </div>
-
-
-        <ul>
-            @foreach($articles as $article)
-                <li>
-                    <a href="{{ route('articles.show', $article) }}">
-                        {{ $article->title }}
-                    </a>
-                    <a href="{{ route('articles.edit', $article) }}" style="color: cornflowerblue">
-                        Editar
-                    </a>
-                </li>
-            @endforeach
-        </ul>
     </div>
 </div>

@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use App\Models\Article;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ArticlesTable extends Component
 {
+    use WithPagination;
+
     public $searh = '';
 
     public function render()
@@ -14,7 +17,7 @@ class ArticlesTable extends Component
         return view('livewire.articles-table', [
             'articles' => Article::where(
                 'title', 'like',"%{$this->searh}%"
-            )->latest()->get()
+            )->latest()->paginate(5)
         ]);
     }
 }
